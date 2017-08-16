@@ -20,16 +20,36 @@ int obtenerValor(Numero** arreglo, int pos)
 
 //Devuelve true si y solo si todas las letras de las cadenas de la lista son mayusculas
 bool sonMayusculas(list<string> palabras) {
-    for (int i = 0; i <palabras.size() ; ++i) {
-
+    for (list<string>::iterator i = palabras.begin(); i!=palabras.end();i++)
+    {
+        string palabra = *i;
+        for (int j = 0; j <(int)palabra.size() ; ++j)
+            if(palabra[j]<'A'||palabra[j]>'Z')
+                return false;
     }
-    return false;
+    return true;
 }
 
 //Devuelve un vector que contenga todos los valores del vector de parametro sin repetir ningun valor
 vector<int> eliminarRepetidos(vector<int> vector_a)
 {
     vector<int> respuesta;
+    bool encontrar = false;
+    for(int i=0;i<vector_a.size();i++){
+        if(i==0)
+            respuesta.push_back(vector_a[i]);
+        else
+        {
+            for (int j = 0; j <respuesta.size() ; ++j) {
+                if (vector_a[i] == respuesta[j])
+                    encontrar = true;
+            }
+            if(!encontrar)
+                respuesta.push_back(vector_a[i]);
+                else
+                    encontrar=false;
+        }
+    }
     return respuesta;
 }
 
@@ -37,14 +57,25 @@ vector<int> eliminarRepetidos(vector<int> vector_a)
 void guardar(string nombre_archivo, Pais* pais)
 {
     ofstream xD(nombre_archivo.c_str());
-    xD<<pais<<endl;
+    xD<<pais->nombre<<endl;
+    xD<<pais->capital<<endl;
+    xD<<pais->habitantes<<endl;
+    xD<<pais->superficie<<endl;
     xD.close();
 }
 
 //Devuelve un objeto Pais que contenga la informacion que se guardo anteriormente por la funcion guardar()
 Pais* abrir(string nombre_archivo)
 {
-    return NULL;
+    ifstream in(nombre_archivo.c_str());
+    string nombre,capital;
+    int habitantes, superficie;
+    in>>nombre;
+    in>>capital;
+    in>>habitantes;
+    in>>superficie;
+    in.close();
+    return new Pais(nombre,capital,habitantes,superficie);
 
 }
 
